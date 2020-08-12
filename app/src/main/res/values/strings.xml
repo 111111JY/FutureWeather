@@ -2,4 +2,9 @@
     <string name="app_name">FutureWeather</string>
     <string name="search_place_edit_hint">请输入地区</string>
     <string name="content_loading_holder">加载中</string>
+    <string name="forecast">预报</string>
+    <string name="coldRisk">感冒</string>
+    <string name="dressing">穿衣</string>
+    <string name="ultraviolet">实时紫外线</string>
+    <string name="card_washing">洗车</string>
 </resources>
