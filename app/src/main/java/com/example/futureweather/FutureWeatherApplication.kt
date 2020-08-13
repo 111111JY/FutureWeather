@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.Color
+import android.view.View
+import android.view.Window
 
 
 /**
@@ -20,13 +23,5 @@ class FutureWeatherApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         context = applicationContext
-    }
-
-    /**
-     * 判断当前系统是否为黑夜模式
-     */
-    fun isDarkTheme(): Boolean {
-        val flag = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        return flag == Configuration.UI_MODE_NIGHT_YES
     }
 }

@@ -9,7 +9,7 @@ import com.example.futureweather.logic.model.PlaceResponse
 class WeatherViewModel : ViewModel() {
     private val locationLiveData = MutableLiveData<PlaceResponse.Location>()
 
-    var locaitonLng = ""
+    var locationLng = ""
     var locationLat = ""
     var placeName = ""
 

@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.futureweather.MainActivity
 import com.example.futureweather.R
 import com.example.futureweather.extension.showToast
 import com.example.futureweather.ui.weather.WeatherActivity
@@ -31,7 +32,7 @@ class PlaceFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        if (viewModel.isPlaceSaved()) {
+        if (activity is MainActivity && viewModel.isPlaceSaved()) {
             val place = viewModel.getSavedLiveData()
             val intent = Intent(context, WeatherActivity::class.java).apply {
                 putExtra("location_lng", place.location.lng)

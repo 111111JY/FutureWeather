@@ -1,10 +1,11 @@
 <resources>
-    <string name="app_name">FutureWeather</string>
+    <string name="app_name">未来天气</string>
     <string name="search_place_edit_hint">请输入地区</string>
     <string name="content_loading_holder">加载中</string>
-    <string name="forecast">预报</string>
-    <string name="coldRisk">感冒</string>
-    <string name="dressing">穿衣</string>
+    <string name="forecast">每日天气</string>
+    <string name="life_index">生活指数</string>
+    <string name="coldRisk">感冒指数</string>
+    <string name="dressing">穿衣建议</string>
     <string name="ultraviolet">实时紫外线</string>
-    <string name="card_washing">洗车</string>
+    <string name="card_washing">洗车建议</string>
 </resources>
