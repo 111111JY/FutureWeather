@@ -1,6 +1,8 @@
 package com.example.futureweather.logic
 
 import androidx.lifecycle.liveData
+import com.example.futureweather.logic.dao.PlaceDao
+import com.example.futureweather.logic.model.PlaceResponse
 import com.example.futureweather.logic.model.Weather
 import com.example.futureweather.logic.network.FutureWeatherNetwork
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +39,7 @@ object Repository {
 
             if (realTimeResponse.status == "ok" && dailyResponse.status == "ok") {
                 val weather =
-                    Weather(realTimeResponse.result.realTime, dailyResponse.result.daily)
+                    Weather(realTimeResponse.result.realtime, dailyResponse.result.daily)
                 Result.success(weather)
             } else {
                 Result.failure(
@@ -49,6 +51,12 @@ object Repository {
             }
         }
     }
+
+    fun savePlace(place: PlaceResponse.Place) = PlaceDao.savePlace(place)
+
+    fun getSavedPlace() =  PlaceDao.getSavedPlace()
+
+    fun isPlaceSaved() =  PlaceDao.isPlaceSaved()
 
     /**
      * 对返回的结果统一做try catch处理

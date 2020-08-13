@@ -1,5 +1,6 @@
 package com.example.futureweather.logic.network
 
+import com.example.futureweather.utils.LogUtil
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,8 +34,12 @@ object FutureWeatherNetwork {
             enqueue(object : Callback<T> {
                 override fun onResponse(call: Call<T>, response: Response<T>) {
                     val body = response.body()
-                    if (body != null) continuation.resume(body)
-                    else continuation.resumeWithException(RuntimeException("response body is null !"))
+                    if (body != null){
+                        LogUtil.i("test",body.toString())
+                        continuation.resume(body)
+                    } else {
+                        continuation.resumeWithException(RuntimeException("response body is null !"))
+                    }
                 }
 
                 override fun onFailure(call: Call<T>, t: Throwable) {

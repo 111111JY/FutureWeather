@@ -6,7 +6,8 @@ import com.google.gson.annotations.SerializedName
  * 实时天气信息数据结构
  */
 data class RealTimeResponse(val status: String, val result: Result) {
-    data class Result(val realTime: RealTime)
+
+    data class Result(val realtime: RealTime)
 
     data class RealTime(
         val skycon: String,

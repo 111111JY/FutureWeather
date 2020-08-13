@@ -7,10 +7,10 @@ import com.example.futureweather.logic.Repository
 import com.example.futureweather.logic.model.PlaceResponse
 
 class PlaceViewModel : ViewModel() {
-    private val searchLiveData = MutableLiveData<String>()
-
     val placeList = ArrayList<PlaceResponse.Place>()
 
+    // searchLiveData
+    private val searchLiveData = MutableLiveData<String>()
     val placeLiveData = Transformations.switchMap(searchLiveData) { query ->
         Repository.searchPlaces(query)
     }
@@ -18,4 +18,12 @@ class PlaceViewModel : ViewModel() {
     fun searchPlaces(query: String) {
         searchLiveData.value = query
     }
+
+    //saveLiveData
+
+    fun savePlace(place: PlaceResponse.Place) = Repository.savePlace(place)
+
+    fun getSavedLiveData() = Repository.getSavedPlace()
+
+    fun isPlaceSaved() = Repository.isPlaceSaved()
 }

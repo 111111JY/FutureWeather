@@ -8,16 +8,16 @@ import com.google.gson.annotations.SerializedName
  * @param status 返回状态
  * @param places 返回的地区数据列表
  */
-data class PlaceResponse(val status: String, val places: List<Place>){
+ data class PlaceResponse(val status: String, val places: List<Place>){
     /**
      * 地区
      * @param name 名称
      * @param location 位置信息
      * @param address 地址
      */
-    data class Place(
+     data class Place(
         val name: String,
-        val location: android.location.Location,
+        val location: Location,
         @SerializedName("formatted_address") val address: String
     )
 
@@ -26,6 +26,6 @@ data class PlaceResponse(val status: String, val places: List<Place>){
      * @param lng 经度
      * @param lat 纬度
      */
-    data class Location(val lng: String, val lat: String)
+     data class Location(val lng: String, val lat: String)
 }
 

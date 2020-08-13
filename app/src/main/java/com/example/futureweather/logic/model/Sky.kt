@@ -2,7 +2,7 @@ package com.example.futureweather.logic.model
 
 import com.example.futureweather.R
 
-class Sky(val info: String, val icon: Int, val bg: Int) {
+data class Sky(val info: String, val icon: Int, val bg: Int)
     private val sky = mapOf(
         "CLEAR_DAY" to Sky(
             "晴",
@@ -118,4 +118,3 @@ class Sky(val info: String, val icon: Int, val bg: Int) {
     fun getSky(skyCon: String): Sky {
         return sky[skyCon] ?: sky["CLEAR_DAY"]!!
     }
-}
