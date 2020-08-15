@@ -3,33 +3,26 @@
     android:id="@+id/nowLayout"
     android:layout_width="match_parent"
     android:layout_height="530dp"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <FrameLayout
         android:id="@+id/titleLayout"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="150dp"
         android:fitsSystemWindows="true">
-
-        <Button
-            android:id="@+id/navBtn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="15dp"
-            android:background="@android:drawable/ic_menu_search" />
 
         <TextView
             android:id="@+id/placeName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center|bottom"
             android:layout_marginStart="60dp"
             android:layout_marginEnd="60dp"
             android:ellipsize="middle"
             android:singleLine="true"
             android:textColor="@color/nowTextColor"
-            android:textSize="22sp" />
+            android:textSize="25sp" />
 
     </FrameLayout>
 
@@ -37,7 +30,8 @@
         android:id="@+id/bodyLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_below="@+id/titleLayout"
+        android:layout_marginTop="50dp"
         android:orientation="vertical">
 
         <TextView

@@ -1,10 +1,12 @@
 package com.example.futureweather.logic
 
 import androidx.lifecycle.liveData
+import com.example.futureweather.extension.showToast
 import com.example.futureweather.logic.dao.PlaceDao
 import com.example.futureweather.logic.model.PlaceResponse
 import com.example.futureweather.logic.model.Weather
 import com.example.futureweather.logic.network.FutureWeatherNetwork
+import com.example.futureweather.utils.LogUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -34,12 +36,16 @@ object Repository {
                 FutureWeatherNetwork.getDaily(lng, lat)
             }
 
+            LogUtil.i("ApiTest","realTime api url= https://api.caiyunapp.com/v2.5/TH9Qw0cSKnY98jQG/$lng,$lat/realtime.json")
+            LogUtil.i("ApiTest","daily api url= https://api.caiyunapp.com/v2.5/TH9Qw0cSKnY98jQG/$lng,$lat/daily.json")
+
             val realTimeResponse = deferredRealtime.await()
             val dailyResponse = deferredDaily.await()
 
             if (realTimeResponse.status == "ok" && dailyResponse.status == "ok") {
                 val weather =
                     Weather(realTimeResponse.result.realtime, dailyResponse.result.daily)
+                "数据更新成功".showToast()
                 Result.success(weather)
             } else {
                 Result.failure(

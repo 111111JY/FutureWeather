@@ -1,8 +1,11 @@
 package com.example.futureweather.ui.weather
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
@@ -18,14 +21,14 @@ import com.example.futureweather.logic.model.DailyResponse
 import com.example.futureweather.logic.model.RealTimeResponse
 import com.example.futureweather.logic.model.Weather
 import com.example.futureweather.logic.model.getSky
+import com.example.futureweather.utils.AppBarLayoutStateChangeListener
 import com.example.futureweather.utils.GlobalUtil
 import com.example.futureweather.utils.LogUtil
+import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_weather.*
 import kotlinx.android.synthetic.main.forecast.*
 import kotlinx.android.synthetic.main.life_index.*
 import kotlinx.android.synthetic.main.now.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 class WeatherActivity : AppCompatActivity() {
 
@@ -34,11 +37,13 @@ class WeatherActivity : AppCompatActivity() {
     }
 
     val viewModel by lazy { ViewModelProviders.of(this).get(WeatherViewModel::class.java) }
+    private var currentTemperature: String = ""
+    private var currentSkyText: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //将状态栏设置为透明色
-        GlobalUtil.setStatusBarTransparent(window)
+//        GlobalUtil.setStatusBarTransparent(window)
         setContentView(R.layout.activity_weather)
         //初始化数据
         initData()
@@ -46,6 +51,63 @@ class WeatherActivity : AppCompatActivity() {
         generateSwipeRefresh()
         //生成侧滑菜单
         generateDrawerLayout()
+        //生成悬浮按钮
+        generateFabBtn()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> "管理地区功能正在加速开发中，请耐心等待！".showToast()
+            R.id.addPlace -> drawerLayout.openDrawer(GravityCompat.END)
+        }
+        return true
+    }
+
+    /**
+     * 刷新天气信息数据
+     */
+    fun refreshWeather() {
+        viewModel.refreshWeather(viewModel.locationLng, viewModel.locationLat)
+        swipeRefresh.isRefreshing = true
+
+        weatherContent.isSmoothScrollingEnabled = true
+        weatherContent.smoothScrollTo(0, 0)
+    }
+
+    /**
+     * 设置标题栏
+     */
+    private fun setAppBar(title: String) {
+        setSupportActionBar(toolbar)
+        supportActionBar?.let {
+            it.setDisplayHomeAsUpEnabled(true)
+            it.setHomeAsUpIndicator(R.drawable.ic_menu)
+        }
+        appBar.addOnOffsetChangedListener(object : AppBarLayoutStateChangeListener() {
+            override fun onStateChanged(appBarLayout: AppBarLayout?, state: State?) {
+                when (state) {
+                    State.COLLAPSED -> {
+                        toolbar.visibility = View.VISIBLE
+                        collapsingToolbar.title = title
+                    }
+                    State.INTERMEDIATE -> {
+                        toolbar.visibility = View.INVISIBLE
+                        collapsingToolbar.title = ""
+                    }
+                    else -> {
+                        toolbar.visibility = View.INVISIBLE
+                        supportActionBar?.setDisplayShowTitleEnabled(false)
+                        collapsingToolbar.title = ""
+                    }
+                }
+            }
+        })
+
     }
 
     /**
@@ -66,8 +128,11 @@ class WeatherActivity : AppCompatActivity() {
             val weather = result.getOrNull()
             if (weather != null) {
                 showWeatherInfo(weather)
+                //设置标题栏
+                setAppBar(viewModel.placeName + "  $currentSkyText  $currentTemperature")
             } else {
                 "无法成功获取天气信息".showToast()
+                setAppBar("定位失败")
                 result.exceptionOrNull()?.printStackTrace()
             }
             //数据回来后，需要将进度条设置为停止
@@ -96,9 +161,10 @@ class WeatherActivity : AppCompatActivity() {
      */
     private fun generateNowUI(realtime: RealTimeResponse.RealTime) {
         placeName.text = viewModel.placeName
-        val currentTempText = "${realtime.temperature.toInt()} ℃"
-        currentTemp.text = currentTempText
-        currentSky.text = getSky(realtime.skycon).info
+        currentTemperature = "${realtime.temperature.toInt()} ℃"
+        currentTemp.text = currentTemperature
+        currentSkyText = getSky(realtime.skycon).info
+        currentSky.text = currentSkyText
         val currentPM25Text = "空气指数 ${realtime.airQuality.aqi.chn.toInt()}"
         currentAQI.text = currentPM25Text
         nowLayout.setBackgroundResource(getSky(realtime.skycon).bg)
@@ -120,8 +186,10 @@ class WeatherActivity : AppCompatActivity() {
             val skyIcon = view.findViewById(R.id.skyIcon) as ImageView
             val skyInfo = view.findViewById(R.id.skyInfo) as TextView
             val temperatureInfo = view.findViewById(R.id.temperatureInfo) as TextView
-            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            dateInfo.text = simpleDateFormat.format(skycon.date)
+//            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+//            dateInfo.text = simpleDateFormat.format(skycon.date)
+//            dateInfo.text = GlobalUtil.dateToString(skycon.date, "yyyy-MM-dd")
+            dateInfo.text = GlobalUtil.timeStampToString(skycon.date.time, "yyyy-MM-dd")
             val sky = getSky(skycon.value)
             skyIcon.setImageResource(sky.icon)
             skyInfo.text = sky.info
@@ -141,16 +209,13 @@ class WeatherActivity : AppCompatActivity() {
         dressingText.text = lifeIndex.dressing[0].desc
         ultravioletText.text = lifeIndex.ultraviolet[0].desc
         cardWashingText.text = lifeIndex.carWashing[0].desc
-        weatherLayout.visibility = View.VISIBLE
+        weatherContent.visibility = View.VISIBLE
     }
 
     /**
      * 生成侧滑菜单栏UI(切换城市fragment @PlaceFragment)
      */
     private fun generateDrawerLayout() {
-        navBtn.setOnClickListener {
-            drawerLayout.openDrawer(GravityCompat.START)
-        }
         drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerStateChanged(newState: Int) {}
 
@@ -181,10 +246,31 @@ class WeatherActivity : AppCompatActivity() {
     }
 
     /**
-     * 刷新天气信息数据
+     * 生成悬浮按钮
      */
-    fun refreshWeather() {
-        viewModel.refreshWeather(viewModel.locationLng, viewModel.locationLat)
-        swipeRefresh.isRefreshing = true
+    private fun generateFabBtn() {
+        //下滑隐藏悬浮按钮  上滑显示悬浮按钮
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            weatherContent.setOnScrollChangeListener { scrollView, x, y, oldx, oldy ->
+                if (y > oldy + 50) {
+                    fabShareBtn.visibility = View.INVISIBLE
+                }
+                if (y < oldy - 50) {
+                    fabShareBtn.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        fabShareBtn.setOnClickListener {
+            "分享功能正在加速开发中，请耐心等待！".showToast()
+        }
+
+        fabControlPlaceBtn.setOnClickListener {
+            "管理地区功能正在加速开发中，请耐心等待！".showToast()
+        }
+
+        fabAddPlaceBtn.setOnClickListener {
+            drawerLayout.openDrawer(GravityCompat.END)
+        }
     }
 }

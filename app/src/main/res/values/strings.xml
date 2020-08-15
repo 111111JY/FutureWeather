@@ -8,4 +8,5 @@
     <string name="dressing">穿衣建议</string>
     <string name="ultraviolet">实时紫外线</string>
     <string name="card_washing">洗车建议</string>
+    <string name="add_place">添加地区</string>
 </resources>
