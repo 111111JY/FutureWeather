@@ -36,15 +36,24 @@ object Repository {
                 FutureWeatherNetwork.getDaily(lng, lat)
             }
 
-            LogUtil.i("ApiTest","realTime api url= https://api.caiyunapp.com/v2.5/TH9Qw0cSKnY98jQG/$lng,$lat/realtime.json")
-            LogUtil.i("ApiTest","daily api url= https://api.caiyunapp.com/v2.5/TH9Qw0cSKnY98jQG/$lng,$lat/daily.json")
+            LogUtil.i(
+                "ApiTest",
+                "realTime api url= https://api.caiyunapp.com/v2.5/TH9Qw0cSKnY98jQG/$lng,$lat/realtime.json"
+            )
+            LogUtil.i(
+                "ApiTest",
+                "daily api url= https://api.caiyunapp.com/v2.5/TH9Qw0cSKnY98jQG/$lng,$lat/daily.json"
+            )
 
             val realTimeResponse = deferredRealtime.await()
             val dailyResponse = deferredDaily.await()
 
             if (realTimeResponse.status == "ok" && dailyResponse.status == "ok") {
                 val weather =
-                    Weather(realTimeResponse.result.realtime, dailyResponse.result.daily)
+                    Weather(
+                        realTimeResponse.result.realtime,
+                        dailyResponse.result.daily
+                    )
                 "数据更新成功".showToast()
                 Result.success(weather)
             } else {
@@ -60,9 +69,9 @@ object Repository {
 
     fun savePlace(place: PlaceResponse.Place) = PlaceDao.savePlace(place)
 
-    fun getSavedPlace() =  PlaceDao.getSavedPlace()
+    fun getSavedPlace() = PlaceDao.getSavedPlace()
 
-    fun isPlaceSaved() =  PlaceDao.isPlaceSaved()
+    fun isPlaceSaved() = PlaceDao.isPlaceSaved()
 
     /**
      * 对返回的结果统一做try catch处理

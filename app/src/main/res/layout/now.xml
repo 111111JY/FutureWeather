@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nowLayout"
     android:layout_width="match_parent"
     android:layout_height="530dp"
     android:fitsSystemWindows="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:background="@drawable/bg_clear_day">
 
     <FrameLayout
         android:id="@+id/titleLayout"
@@ -16,13 +18,24 @@
             android:id="@+id/placeName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center|bottom"
+            android:layout_gravity="center"
             android:layout_marginStart="60dp"
             android:layout_marginEnd="60dp"
             android:ellipsize="middle"
             android:singleLine="true"
             android:textColor="@color/nowTextColor"
-            android:textSize="25sp" />
+            android:textSize="25sp"
+            tools:text="花都区" />
+
+        <TextView
+            android:id="@+id/serverTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/nowTextColor"
+            android:textSize="13sp"
+            tools:text="8月18日,周二 21:05" />
 
     </FrameLayout>
 
@@ -31,43 +44,76 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/titleLayout"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="40dp"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/currentTemp"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:textColor="@color/nowTextColor"
-            android:textSize="70sp" />
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.8">
+
+                <ImageView
+                    android:id="@+id/title_skyIcon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="30dp"
+                    android:scaleType="fitCenter"
+                    tools:src="@drawable/ic_clear_night" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/currentTemp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:gravity="center_vertical|left"
+                android:textColor="@color/nowTextColor"
+                android:textSize="60sp"
+                tools:text="26 ℃" />
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="25dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/currentSky"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/nowTextColor"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                tools:text="中雨" />
 
             <TextView
+                android:id="@+id/currentApparentTemp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="|"
+                android:layout_marginTop="10dp"
                 android:textColor="@color/nowTextColor"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                tools:text="体感温度 27℃" />
 
             <TextView
-                android:id="@+id/currentAQI"
+                android:id="@+id/currentHumidity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:textColor="@color/nowTextColor"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                tools:text="相对湿度 92%" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

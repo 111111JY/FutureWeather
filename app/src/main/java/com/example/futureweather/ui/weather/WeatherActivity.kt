@@ -26,9 +26,11 @@ import com.example.futureweather.utils.GlobalUtil
 import com.example.futureweather.utils.LogUtil
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_weather.*
+import kotlinx.android.synthetic.main.aqi.*
 import kotlinx.android.synthetic.main.forecast.*
 import kotlinx.android.synthetic.main.life_index.*
 import kotlinx.android.synthetic.main.now.*
+import java.util.*
 
 class WeatherActivity : AppCompatActivity() {
 
@@ -147,6 +149,8 @@ class WeatherActivity : AppCompatActivity() {
     private fun showWeatherInfo(weather: Weather) {
         val realtime = weather.realtime
         val daily = weather.daily
+        //填充aqi.xml布局中的数据
+        generateAqiUI(realtime)
         //填充now.xml布局中的数据
         generateNowUI(realtime)
         //填充forecast.xml布局中的数据
@@ -156,17 +160,35 @@ class WeatherActivity : AppCompatActivity() {
     }
 
     /**
+     * 生成实时天气空气质量UI
+     * @param realtime RealTime 数据对象
+     */
+    private fun generateAqiUI(realtime: RealTimeResponse.RealTime){
+        air_quality_desc.text = realtime.airQuality.description.chn
+        aqi_value.text = realtime.airQuality.aqi.chn.toInt().toString()
+        pm25_value.text = realtime.airQuality.pm25.toString()
+    }
+
+    /**
      * 生成实时天气UI
      * @param realtime RealTime 数据对象
      */
     private fun generateNowUI(realtime: RealTimeResponse.RealTime) {
         placeName.text = viewModel.placeName
-        currentTemperature = "${realtime.temperature.toInt()} ℃"
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = System.currentTimeMillis()
+        serverTime.text = GlobalUtil.timeStampToString(calendar.timeInMillis, "MM月dd日，EEEE  HH:mm")
+        title_skyIcon.setImageResource(getSky(realtime.skycon).icon)
+        currentTemperature = "${realtime.temperature.toInt()}℃"
         currentTemp.text = currentTemperature
         currentSkyText = getSky(realtime.skycon).info
         currentSky.text = currentSkyText
-        val currentPM25Text = "空气指数 ${realtime.airQuality.aqi.chn.toInt()}"
-        currentAQI.text = currentPM25Text
+        val currentApparentTemperature = "体感温度 ${realtime.apparent_temperature.toInt()}℃"
+        currentApparentTemp.text = currentApparentTemperature
+//        val currentPM25Text = "空气指数 ${realtime.airQuality.aqi.chn.toInt()}"
+//        currentAQI.text = currentPM25Text
+        val currentHumidityText = "相对湿度 ${(realtime.humidity*100).toInt()}%"
+        currentHumidity.text = currentHumidityText
         nowLayout.setBackgroundResource(getSky(realtime.skycon).bg)
     }
 
@@ -186,9 +208,6 @@ class WeatherActivity : AppCompatActivity() {
             val skyIcon = view.findViewById(R.id.skyIcon) as ImageView
             val skyInfo = view.findViewById(R.id.skyInfo) as TextView
             val temperatureInfo = view.findViewById(R.id.temperatureInfo) as TextView
-//            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-//            dateInfo.text = simpleDateFormat.format(skycon.date)
-//            dateInfo.text = GlobalUtil.dateToString(skycon.date, "yyyy-MM-dd")
             dateInfo.text = GlobalUtil.timeStampToString(skycon.date.time, "yyyy-MM-dd")
             val sky = getSky(skycon.value)
             skyIcon.setImageResource(sky.icon)

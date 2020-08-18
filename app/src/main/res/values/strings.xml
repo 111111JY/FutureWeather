@@ -4,9 +4,14 @@
     <string name="content_loading_holder">加载中</string>
     <string name="forecast">每日天气</string>
     <string name="life_index">生活指数</string>
+    <string name="air_quality">空气质量</string>
+    <string name="aqi">AQI</string>
+    <string name="pm_25">PM2.5</string>
     <string name="coldRisk">感冒指数</string>
     <string name="dressing">穿衣建议</string>
     <string name="ultraviolet">实时紫外线</string>
     <string name="card_washing">洗车建议</string>
     <string name="add_place">添加地区</string>
+
+    <string name="app_ps">天气数据由彩云天气API提供 @Created By JimYoung</string>
 </resources>

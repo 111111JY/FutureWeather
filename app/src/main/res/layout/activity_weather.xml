@@ -49,7 +49,7 @@
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
             android:src="@android:drawable/ic_menu_share"
-            app:backgroundTint="@color/colorAccent"
+            app:backgroundTint="@color/nowTextColor"
             app:elevation="10dp"
             app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
 
@@ -94,13 +94,20 @@
                     android:layout_marginTop="40dp"
                     android:orientation="vertical">
 
-                    <!--<include layout="@layout/now" />-->
+                    <include layout="@layout/aqi" />
 
                     <include layout="@layout/forecast" />
 
                     <include layout="@layout/life_index" />
 
-                    <include layout="@layout/pad_layout" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="3dp"
+                        android:text="@string/app_ps"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
             </androidx.core.widget.NestedScrollView>

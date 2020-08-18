@@ -8,6 +8,7 @@
     <color name="nowTextColor">#fff</color>
     <color name="transWhite_50">#80FFFFFF</color>
     <color name="trans_50">#80000000</color>
+    <color name="split_view">#4A000000</color>
 </resources>
 
 
