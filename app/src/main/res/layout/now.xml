@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nowLayout"
     android:layout_width="match_parent"
-    android:layout_height="530dp"
+    android:layout_height="500dp"
     android:fitsSystemWindows="true"
     android:orientation="vertical"
-    tools:background="@drawable/bg_clear_day">
+    android:background="@drawable/bg_sky_holder">
 
     <FrameLayout
         android:id="@+id/titleLayout"
@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:textColor="@color/nowTextColor"
             android:textSize="13sp"
             tools:text="8月18日,周二 21:05" />
@@ -44,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/titleLayout"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -59,8 +59,8 @@
 
                 <ImageView
                     android:id="@+id/title_skyIcon"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="30dp"
@@ -82,10 +82,10 @@
 
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
@@ -98,22 +98,25 @@
                 tools:text="中雨" />
 
             <TextView
-                android:id="@+id/currentApparentTemp"
-                android:layout_width="wrap_content"
+                android:id="@+id/comfortText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
                 android:textColor="@color/nowTextColor"
                 android:textSize="18sp"
-                tools:text="体感温度 27℃" />
+                tools:text="今日天气人体感觉凉爽" />
 
             <TextView
-                android:id="@+id/currentHumidity"
-                android:layout_width="wrap_content"
+                android:id="@+id/descriptionText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
                 android:textColor="@color/nowTextColor"
                 android:textSize="18sp"
-                tools:text="相对湿度 92%" />
+                tools:text="未来24小时阴" />
+
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

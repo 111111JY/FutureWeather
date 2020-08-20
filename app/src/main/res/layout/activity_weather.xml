@@ -13,7 +13,7 @@
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBar"
             android:layout_width="match_parent"
-            android:layout_height="530dp"
+            android:layout_height="500dp"
             android:fitsSystemWindows="true">
 
             <!--contentScrim 折叠后的背景色-->
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:src="@android:drawable/ic_menu_share"
+            android:src="@drawable/ic_share"
             app:backgroundTint="@color/nowTextColor"
             app:elevation="10dp"
             app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
@@ -68,10 +68,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:src="@drawable/ic_location"
+            android:src="@drawable/ic_add_bold"
             app:backgroundTint="@color/nowTextColor"
             app:layout_anchor="@id/appBar"
             app:layout_anchorGravity="bottom|end" />
+
+        <LinearLayout
+            android:id="@+id/disconnectHolderLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:text="@string/disconnect_tips"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/disconnectBgImg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/bg_disconnect_boy" />
+        </LinearLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefresh"
@@ -95,6 +120,12 @@
                     android:orientation="vertical">
 
                     <include layout="@layout/aqi" />
+
+                    <include layout="@layout/today_more" />
+
+                    <include layout="@layout/rain_2h" />
+
+                    <include layout="@layout/hourly" />
 
                     <include layout="@layout/forecast" />
 
@@ -120,13 +151,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/colorPrimary"
         android:clickable="true"
+        android:background="@color/colorAccent"
         android:focusable="true">
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/placeFragment"
-            android:name="com.example.futureweather.ui.place.PlaceFragment"
+            android:id="@+id/manageFragment"
+            android:name="com.example.futureweather.ui.manage.ManageFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="45dp" />
@@ -136,8 +167,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:background="@color/colorPrimary"
         android:clickable="true"
+        android:background="@color/colorAccent"
         android:focusable="true">
 
         <androidx.fragment.app.FragmentContainerView

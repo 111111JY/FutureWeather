@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.MaterialComponents.CardView"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="170dp"
     android:layout_margin="15dp"
     app:cardCornerRadius="20dp"
-    app:cardElevation="@dimen/cardview_default_elevation">
+    app:cardElevation="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <TextView
@@ -23,17 +23,23 @@
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="20sp" />
 
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/airIconImg"
+            android:src="@drawable/ic_great"
+            android:layout_gravity="center_horizontal"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="bottom"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView
@@ -62,12 +68,16 @@
             <TextView
                 android:id="@+id/air_quality_desc"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:layout_weight="1"
+                android:singleLine="false"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:maxLines="2"
                 android:gravity="center"
-                android:textSize="50sp"
-                tools:text="优" />
+                android:textSize="33sp"
+                tools:text="重度污染" />
 
             <View
                 android:layout_width="1px"
@@ -80,7 +90,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="bottom"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView

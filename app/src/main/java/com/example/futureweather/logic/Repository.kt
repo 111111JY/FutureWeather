@@ -36,23 +36,47 @@ object Repository {
                 FutureWeatherNetwork.getDaily(lng, lat)
             }
 
+            val deferredHourly = async {
+                FutureWeatherNetwork.getHourly(lng, lat)
+            }
+
+            val deferredMinutely = async {
+                FutureWeatherNetwork.getMinutely(lng, lat)
+            }
+
             LogUtil.i(
                 "ApiTest",
                 "realTime api url= https://api.caiyunapp.com/v2.5/TH9Qw0cSKnY98jQG/$lng,$lat/realtime.json"
             )
             LogUtil.i(
                 "ApiTest",
+                "daily api url= https://api.caiyunapp.com/v2.5/TH9Qw0cSKnY98jQG/$lng,$lat/hourly.json"
+            )
+            LogUtil.i(
+                "ApiTest",
                 "daily api url= https://api.caiyunapp.com/v2.5/TH9Qw0cSKnY98jQG/$lng,$lat/daily.json"
+            )
+            LogUtil.i(
+                "ApiTest",
+                "daily api url= https://api.caiyunapp.com/v2.5/TH9Qw0cSKnY98jQG/$lng,$lat/minutely.json"
             )
 
             val realTimeResponse = deferredRealtime.await()
             val dailyResponse = deferredDaily.await()
+            val hourlyResponse = deferredHourly.await()
+            val minutelyResponse = deferredMinutely.await()
 
-            if (realTimeResponse.status == "ok" && dailyResponse.status == "ok") {
+            if (realTimeResponse.status == "ok" &&
+                dailyResponse.status == "ok" &&
+                hourlyResponse.status == "ok" &&
+                minutelyResponse.status == "ok"
+            ) {
                 val weather =
                     Weather(
                         realTimeResponse.result.realtime,
-                        dailyResponse.result.daily
+                        dailyResponse.result.daily,
+                        hourlyResponse.result.hourly,
+                        minutelyResponse.result.minutely
                     )
                 "数据更新成功".showToast()
                 Result.success(weather)
@@ -60,7 +84,9 @@ object Repository {
                 Result.failure(
                     RuntimeException(
                         "realTimeResponse status is ${realTimeResponse.status}" +
-                                "dailyResponse status is ${dailyResponse.status}"
+                                "dailyResponse status is ${dailyResponse.status}" +
+                                "hourlyResponse status is ${hourlyResponse.status}" +
+                                "minutelyResponse status is ${minutelyResponse.status}"
                     )
                 )
             }

@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="15dp"
     app:cardCornerRadius="20dp"
-    app:cardElevation="@dimen/cardview_default_elevation">
+    app:cardElevation="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,8 +34,8 @@
 
                 <ImageView
                     android:id="@+id/coldRiskImg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     android:src="@drawable/ic_coldrisk" />
@@ -52,7 +52,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/coldRisk"
-                        android:textSize="12sp" />
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/coldRiskText"
@@ -71,8 +71,8 @@
 
                 <ImageView
                     android:id="@+id/dressingImg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     android:src="@drawable/ic_dressing" />
@@ -89,7 +89,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/dressing"
-                        android:textSize="12sp" />
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/dressingText"
@@ -116,8 +116,8 @@
 
                 <ImageView
                     android:id="@+id/ultravioletImg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     android:src="@drawable/ic_ultraviolet" />
@@ -134,7 +134,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/ultraviolet"
-                        android:textSize="12sp" />
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/ultravioletText"
@@ -153,8 +153,8 @@
 
                 <ImageView
                     android:id="@+id/cardWashingImg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="20dp"
                     android:src="@drawable/ic_carwashing" />
@@ -171,7 +171,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/card_washing"
-                        android:textSize="12sp" />
+                        android:textSize="13sp" />
 
                     <TextView
                         android:id="@+id/cardWashingText"

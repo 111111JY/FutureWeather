@@ -1,8 +1,11 @@
 package com.example.futureweather.ui.weather
 
 import android.content.Context
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -17,19 +20,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.futureweather.R
 import com.example.futureweather.extension.showToast
-import com.example.futureweather.logic.model.DailyResponse
-import com.example.futureweather.logic.model.RealTimeResponse
-import com.example.futureweather.logic.model.Weather
-import com.example.futureweather.logic.model.getSky
+import com.example.futureweather.logic.model.*
 import com.example.futureweather.utils.AppBarLayoutStateChangeListener
 import com.example.futureweather.utils.GlobalUtil
 import com.example.futureweather.utils.LogUtil
+import com.example.futureweather.utils.broadcastreceiver.NetWorkStateReceiver
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_weather.*
 import kotlinx.android.synthetic.main.aqi.*
 import kotlinx.android.synthetic.main.forecast.*
+import kotlinx.android.synthetic.main.hourly.*
 import kotlinx.android.synthetic.main.life_index.*
 import kotlinx.android.synthetic.main.now.*
+import kotlinx.android.synthetic.main.rain_2h.*
+import kotlinx.android.synthetic.main.today_more.*
 import java.util.*
 
 class WeatherActivity : AppCompatActivity() {
@@ -39,13 +43,12 @@ class WeatherActivity : AppCompatActivity() {
     }
 
     val viewModel by lazy { ViewModelProviders.of(this).get(WeatherViewModel::class.java) }
+    private var netWorkStateReceiver = NetWorkStateReceiver()
     private var currentTemperature: String = ""
     private var currentSkyText: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //将状态栏设置为透明色
-//        GlobalUtil.setStatusBarTransparent(window)
         setContentView(R.layout.activity_weather)
         //初始化数据
         initData()
@@ -57,6 +60,20 @@ class WeatherActivity : AppCompatActivity() {
         generateFabBtn()
     }
 
+    override fun onResume() {
+        val filter = IntentFilter()
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
+        registerReceiver(netWorkStateReceiver, filter)
+        LogUtil.i(TAG, "注册网络监听广播")
+        super.onResume()
+    }
+
+    override fun onPause() {
+        unregisterReceiver(netWorkStateReceiver)
+        LogUtil.i(TAG, "注销网络监听广播")
+        super.onPause()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar, menu)
         return true
@@ -64,7 +81,7 @@ class WeatherActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            android.R.id.home -> "管理地区功能正在加速开发中，请耐心等待！".showToast()
+            android.R.id.home -> drawerLayout.openDrawer(GravityCompat.START)
             R.id.addPlace -> drawerLayout.openDrawer(GravityCompat.END)
         }
         return true
@@ -75,10 +92,24 @@ class WeatherActivity : AppCompatActivity() {
      */
     fun refreshWeather() {
         viewModel.refreshWeather(viewModel.locationLng, viewModel.locationLat)
+        toolbar.title = ""
         swipeRefresh.isRefreshing = true
-
         weatherContent.isSmoothScrollingEnabled = true
         weatherContent.smoothScrollTo(0, 0)
+    }
+
+    /**
+     * 是否展示网络断开占位图
+     * @param visibility Boolean
+     */
+    fun showDisconnectBg(visibility: Boolean) {
+        if (visibility) {
+            weatherContent.visibility = View.GONE
+            disconnectHolderLayout.visibility = View.VISIBLE
+        } else {
+            disconnectHolderLayout.visibility = View.GONE
+            weatherContent.visibility = View.VISIBLE
+        }
     }
 
     /**
@@ -133,7 +164,7 @@ class WeatherActivity : AppCompatActivity() {
                 //设置标题栏
                 setAppBar(viewModel.placeName + "  $currentSkyText  $currentTemperature")
             } else {
-                "无法成功获取天气信息".showToast()
+                "无法成功获取天气信息，请检查网络连接".showToast()
                 setAppBar("定位失败")
                 result.exceptionOrNull()?.printStackTrace()
             }
@@ -149,10 +180,18 @@ class WeatherActivity : AppCompatActivity() {
     private fun showWeatherInfo(weather: Weather) {
         val realtime = weather.realtime
         val daily = weather.daily
+        val hourly = weather.hourly
+        val minutely = weather.minutely
         //填充aqi.xml布局中的数据
         generateAqiUI(realtime)
+        //填充today_more.xml布局中的数据
+        generateTodayMore(realtime, daily)
+        //填充rain_2h.xml布局中的数据
+        generateMinutelyUI(minutely)
         //填充now.xml布局中的数据
-        generateNowUI(realtime)
+        generateNowUI(realtime, daily)
+        //填充hourly.xml布局中的数据
+        generateHourlyUI(hourly)
         //填充forecast.xml布局中的数据
         generateForecastUI(daily)
         //填充life_index.xml布局中的数据
@@ -163,32 +202,56 @@ class WeatherActivity : AppCompatActivity() {
      * 生成实时天气空气质量UI
      * @param realtime RealTime 数据对象
      */
-    private fun generateAqiUI(realtime: RealTimeResponse.RealTime){
-        air_quality_desc.text = realtime.airQuality.description.chn
+    private fun generateAqiUI(realtime: RealTimeResponse.RealTime) {
+        val descText = realtime.airQuality.description.chn
+        //优、良、轻度污染、中度污染、重度污染
+        if (descText.length == 1) {
+            air_quality_desc.setTextSize(TypedValue.COMPLEX_UNIT_SP, 45F)
+            air_quality_desc.text = descText
+        } else {
+            air_quality_desc.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28F)
+            air_quality_desc.text = descText
+        }
         aqi_value.text = realtime.airQuality.aqi.chn.toInt().toString()
         pm25_value.text = realtime.airQuality.pm25.toString()
+        when (realtime.airQuality.aqi.chn.toInt()) {
+            in 0..50 -> airIconImg.setImageResource(R.drawable.ic_great)
+            in 51..100 -> airIconImg.setImageResource(R.drawable.ic_normal)
+            in 101..150 -> airIconImg.setImageResource(R.drawable.ic_bad1)
+            in 151..200 -> airIconImg.setImageResource(R.drawable.ic_bad2)
+            in 200..300 -> airIconImg.setImageResource(R.drawable.ic_bad3)
+        }
+    }
+
+    /**
+     * 生成今日天气详情UI
+     * @param realtime RealTime 数据对象
+     */
+    private fun generateTodayMore(realtime: RealTimeResponse.RealTime, daily: DailyResponse.Daily) {
+        minTempText.text = "${daily.temperature[0].min.toInt()}℃"
+        maxTempText.text = "${daily.temperature[0].max.toInt()}℃"
+        apparentTempText.text = "${realtime.apparent_temperature.toInt()}℃"
+        humidityText.text = "${(realtime.humidity * 100).toInt()}%"
+        sunriseText.text = "${daily.astro[0].sunrise.time}"
+        sunsetText.text = "${daily.astro[0].sunset.time}"
+        windDirectionText.text = Wind.getWindDirection(realtime.wind.direction)
+        windStrengthText.text = Wind.getWindStrength(realtime.wind.speed)
     }
 
     /**
      * 生成实时天气UI
      * @param realtime RealTime 数据对象
      */
-    private fun generateNowUI(realtime: RealTimeResponse.RealTime) {
+    private fun generateNowUI(realtime: RealTimeResponse.RealTime, daily: DailyResponse.Daily) {
         placeName.text = viewModel.placeName
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
-        serverTime.text = GlobalUtil.timeStampToString(calendar.timeInMillis, "MM月dd日，EEEE  HH:mm")
+        serverTime.text = GlobalUtil.timeStampToString(calendar.timeInMillis, "MM月dd日  EEEE  HH:mm")
         title_skyIcon.setImageResource(getSky(realtime.skycon).icon)
         currentTemperature = "${realtime.temperature.toInt()}℃"
         currentTemp.text = currentTemperature
         currentSkyText = getSky(realtime.skycon).info
-        currentSky.text = currentSkyText
-        val currentApparentTemperature = "体感温度 ${realtime.apparent_temperature.toInt()}℃"
-        currentApparentTemp.text = currentApparentTemperature
-//        val currentPM25Text = "空气指数 ${realtime.airQuality.aqi.chn.toInt()}"
-//        currentAQI.text = currentPM25Text
-        val currentHumidityText = "相对湿度 ${(realtime.humidity*100).toInt()}%"
-        currentHumidity.text = currentHumidityText
+        comfortText.text = "今日天气人体感觉  ${daily.lifeIndex.comfort[0].desc}"
         nowLayout.setBackgroundResource(getSky(realtime.skycon).bg)
     }
 
@@ -208,7 +271,7 @@ class WeatherActivity : AppCompatActivity() {
             val skyIcon = view.findViewById(R.id.skyIcon) as ImageView
             val skyInfo = view.findViewById(R.id.skyInfo) as TextView
             val temperatureInfo = view.findViewById(R.id.temperatureInfo) as TextView
-            dateInfo.text = GlobalUtil.timeStampToString(skycon.date.time, "yyyy-MM-dd")
+            dateInfo.text = GlobalUtil.timeStampToString(skycon.date.time, "MM-dd  EEEE")
             val sky = getSky(skycon.value)
             skyIcon.setImageResource(sky.icon)
             skyInfo.text = sky.info
@@ -216,6 +279,50 @@ class WeatherActivity : AppCompatActivity() {
             temperatureInfo.text = tempText
             forecastLayout.addView(view)
         }
+    }
+
+    /**
+     * 生成分时天气UI
+     * @param daily Daily 数据对象
+     */
+    private fun generateHourlyUI(hourly: HourlyResponse.Hourly) {
+        hourlyLayout.removeAllViews()
+        for (i in 0 until 10) {
+            val skycon = getSky(hourly.skycon[i].value)
+            val hourTimeText =
+                GlobalUtil.timeStampToString(hourly.skycon[i].datetime.time, "MM-dd  HH:mm")
+            val temperature = (hourly.temperature[i].value).toFloat().toInt()
+            val windDirection = Wind.getWindDirection(hourly.wind[i].direction)
+
+            val view =
+                LayoutInflater.from(this).inflate(R.layout.hourly_item, hourlyLayout, false)
+            val hourlyTime = view.findViewById(R.id.hourlyTime) as TextView
+            val skyIcon = view.findViewById(R.id.skyIcon) as ImageView
+            val skyInfo = view.findViewById(R.id.skyInfo) as TextView
+            val tempInfo = view.findViewById(R.id.tempInfo) as TextView
+            val windDirectionText = view.findViewById(R.id.windDirectionText) as TextView
+
+            hourlyTime.text = hourTimeText
+            skyIcon.setImageResource(skycon.icon)
+            skyInfo.text = skycon.info
+            tempInfo.text = "$temperature℃"
+            windDirectionText.text = windDirection
+
+            hourlyLayout.addView(view)
+        }
+
+        descriptionText.text = hourly.description
+    }
+
+    /**
+     * 生成未来两小时内降雨概率UI
+     * @param minutely Minutely 数据对象
+     */
+    private fun generateMinutelyUI(minutely: MinutelyResponse.Minutely) {
+        rain30Text.text = "${(minutely.probability[0] * 100).toInt()}%"
+        rain60Text.text = "${(minutely.probability[1] * 100).toInt()}%"
+        rain90Text.text = "${(minutely.probability[2] * 100).toInt()}%"
+        rain120Text.text = "${(minutely.probability[3] * 100).toInt()}%"
     }
 
     /**
@@ -257,8 +364,6 @@ class WeatherActivity : AppCompatActivity() {
      */
     private fun generateSwipeRefresh() {
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary)
-        //进入时刷新一次数据，确保展示最新的数据
-        refreshWeather()
         swipeRefresh.setOnRefreshListener {
             refreshWeather()
         }
@@ -285,11 +390,12 @@ class WeatherActivity : AppCompatActivity() {
         }
 
         fabControlPlaceBtn.setOnClickListener {
-            "管理地区功能正在加速开发中，请耐心等待！".showToast()
+            drawerLayout.openDrawer(GravityCompat.START)
         }
 
         fabAddPlaceBtn.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.END)
         }
     }
+
 }

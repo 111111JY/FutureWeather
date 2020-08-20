@@ -5,5 +5,7 @@ package com.example.futureweather.logic.model
  */
 data class Weather(
     val realtime: RealTimeResponse.RealTime,
-    val daily: DailyResponse.Daily
+    val daily: DailyResponse.Daily,
+    val hourly: HourlyResponse.Hourly,
+    val minutely:MinutelyResponse.Minutely
 )

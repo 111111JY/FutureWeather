@@ -1,12 +1,10 @@
 package com.example.futureweather
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.content.res.Configuration
-import android.graphics.Color
-import android.view.View
-import android.view.Window
+import android.os.Bundle
 
 
 /**
@@ -23,5 +21,29 @@ class FutureWeatherApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         context = applicationContext
+        initLifeCycle()
+    }
+
+    private fun initLifeCycle() {
+        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
+            override fun onActivityPaused(p0: Activity) {}
+
+            override fun onActivityStarted(p0: Activity) {}
+
+            override fun onActivityDestroyed(p0: Activity) {}
+
+            override fun onActivitySaveInstanceState(p0: Activity, p1: Bundle) {}
+
+            override fun onActivityStopped(p0: Activity) {}
+
+            override fun onActivityCreated(p0: Activity, p1: Bundle?) {
+               MyActivityManager.INSTANT.setCurrentActivity(p0)
+            }
+
+            override fun onActivityResumed(p0: Activity) {
+                MyActivityManager.INSTANT.setCurrentActivity(p0)
+            }
+
+        })
     }
 }

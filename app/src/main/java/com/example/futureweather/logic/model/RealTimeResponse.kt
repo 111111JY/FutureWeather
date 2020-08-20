@@ -14,8 +14,11 @@ data class RealTimeResponse(val status: String, val result: Result) {
         val temperature: Float,
         val apparent_temperature: Float,
         val humidity: Float,
+        val wind: Wind,
         @SerializedName("air_quality") val airQuality: AirQuality
     )
+
+    data class Wind(val direction: Float, val speed: Float)
 
     data class AirQuality(val pm25: Int, val aqi: AQI, val description: Description)
 

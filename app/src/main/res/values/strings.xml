@@ -2,16 +2,34 @@
     <string name="app_name">未来天气</string>
     <string name="search_place_edit_hint">请输入地区</string>
     <string name="content_loading_holder">加载中</string>
-    <string name="forecast">每日天气</string>
+    <string name="daily_forecast">每日天气</string>
     <string name="life_index">生活指数</string>
+    <string name="rain_probability">降雨概率</string>
+    <string name="rain_30">00~30分钟</string>
+    <string name="rain_60">30~60分钟</string>
+    <string name="rain_90">60~90分钟</string>
+    <string name="rain_120">90~120分钟</string>
+    <string name="today_more">天气详情</string>
+    <string name="hourly_forecast">分时天气</string>
     <string name="air_quality">空气质量</string>
     <string name="aqi">AQI</string>
     <string name="pm_25">PM2.5</string>
+    <string name="min_temp">最低温度</string>
+    <string name="max_temp">最高温度</string>
+    <string name="apparent_temp">体感温度</string>
+    <string name="humidity">相对湿度</string>
+    <string name="sunrise">日出时间</string>
+    <string name="sunset">日落时间</string>
+    <string name="wind_direction">风源方向</string>
+    <string name="wind_strength">风力级别</string>
     <string name="coldRisk">感冒指数</string>
     <string name="dressing">穿衣建议</string>
     <string name="ultraviolet">实时紫外线</string>
     <string name="card_washing">洗车建议</string>
     <string name="add_place">添加地区</string>
+    <string name="manage_place">管理位置</string>
 
-    <string name="app_ps">天气数据由彩云天气API提供 @Created By JimYoung</string>
+    <string name="disconnect_tips">网络已断开，请连接网络</string>
+    <string name="tips_text">请在上方输入搜索地区</string>
+    <string name="app_ps">天气数据由彩云天气API提供 @Created By 危君子</string>
 </resources>

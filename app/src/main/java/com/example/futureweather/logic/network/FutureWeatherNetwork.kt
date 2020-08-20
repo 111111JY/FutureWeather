@@ -25,6 +25,16 @@ object FutureWeatherNetwork {
     suspend fun getRealTime(lng: String, lat: String) = httpService.getRealTimeWeather(lng, lat).await()
 
     /**
+     * 发起查询某个地区的分时天气信息请求
+     */
+    suspend fun getHourly(lng: String, lat: String) = httpService.getHourlyWeather(lng, lat).await()
+
+    /**
+     * 发起查询某个地区的分时天气信息请求
+     */
+    suspend fun getMinutely(lng: String, lat: String) = httpService.getMinutelyWeather(lng, lat).await()
+
+    /**
      * 发起查询某个地区的未来天气信息请求
      */
     suspend fun getDaily(lng: String, lat: String) = httpService.getDailyWeather(lng, lat).await()

@@ -54,6 +54,7 @@ class PlaceFragment : Fragment() {
             } else {
                 recyclerview.visibility = View.GONE
                 bgImageView.visibility = View.VISIBLE
+                tipsText.visibility = View.VISIBLE
                 viewModel.placeList.clear()
                 adapter.notifyDataSetChanged()
             }
@@ -64,6 +65,7 @@ class PlaceFragment : Fragment() {
             if (places != null) {
                 recyclerview.visibility = View.VISIBLE
                 bgImageView.visibility = View.GONE
+                tipsText.visibility = View.GONE
                 viewModel.placeList.clear()
                 viewModel.placeList.addAll(places)
                 adapter.notifyDataSetChanged()
