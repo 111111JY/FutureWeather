@@ -20,13 +20,13 @@ class MainActivity : AppCompatActivity() {
         val filter = IntentFilter()
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
         registerReceiver(netWorkStateReceiver, filter)
-        LogUtil.i(WeatherActivity.TAG, "注册网络监听广播")
+        LogUtil.i(WeatherActivity.TAG, getString(R.string.registerBroadcast))
         super.onResume()
     }
 
     override fun onPause() {
         unregisterReceiver(netWorkStateReceiver)
-        LogUtil.i(WeatherActivity.TAG, "注销网络监听广播")
+        LogUtil.i(WeatherActivity.TAG, getString(R.string.unregisterBroadcast))
         super.onPause()
     }
 

@@ -32,7 +32,7 @@ class PlaceFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        if (activity is MainActivity && viewModel.isPlaceSaved()) {
+        if (activity is MainActivity && viewModel.hasPlace()) {
             val place = viewModel.getSavedLiveData()
             val intent = Intent(context, WeatherActivity::class.java).apply {
                 putExtra("location_lng", place.location.lng)

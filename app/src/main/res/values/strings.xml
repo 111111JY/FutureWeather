@@ -1,7 +1,13 @@
 <resources>
+<!--    基础UI-->
     <string name="app_name">未来天气</string>
     <string name="search_place_edit_hint">请输入地区</string>
-    <string name="content_loading_holder">加载中</string>
+    <string name="add_place">添加地区</string>
+    <string name="manage_place">管理地区</string>
+    <string name="now_place">当前地区</string>
+    <string name="tips_text">请在上方输入搜索地区</string>
+    <string name="app_ps">天气数据由彩云天气API提供 @Created By 危君子</string>
+<!--    天气UI-->
     <string name="daily_forecast">每日天气</string>
     <string name="life_index">生活指数</string>
     <string name="rain_probability">降雨概率</string>
@@ -26,10 +32,20 @@
     <string name="dressing">穿衣建议</string>
     <string name="ultraviolet">实时紫外线</string>
     <string name="card_washing">洗车建议</string>
-    <string name="add_place">添加地区</string>
-    <string name="manage_place">管理位置</string>
+    <string name="today_feel">今日天气人体感觉</string>
 
+<!--    提示-->
+    <string name="content_loading_holder">加载中</string>
+    <string name="updateFail">更新失败</string>
+    <string name="registerBroadcast">注册网络监听广播</string>
+    <string name="unregisterBroadcast">注销网络监听广播</string>
     <string name="disconnect_tips">网络已断开，请连接网络</string>
-    <string name="tips_text">请在上方输入搜索地区</string>
-    <string name="app_ps">天气数据由彩云天气API提供 @Created By 危君子</string>
+    <string name="note_title">提示</string>
+    <string name="note_now_content">系统默认展示当前地区的天气信息</string>
+    <string name="note_delete_content">是否将该地区从地区列表中移除？</string>
+    <string name="note_location_content">是否将该地区设置为当前地区？</string>
+    <string name="note_cancel">取消</string>
+    <string name="note_delete">移除</string>
+    <string name="note_confirm">确定</string>
+    <string name="note_location">设定</string>
 </resources>

@@ -15,14 +15,14 @@
         android:id="@+id/skyIcon"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="20dp" />
+        android:layout_marginLeft="25dp" />
 
     <TextView
         android:id="@+id/skyInfo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_weight="2"
+        android:layout_weight="2.2"
         android:gravity="center_horizontal" />
 
     <TextView
@@ -37,7 +37,7 @@
         android:id="@+id/windIcon"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="15dp"
         android:src="@drawable/ic_wind_direction" />
 
     <TextView

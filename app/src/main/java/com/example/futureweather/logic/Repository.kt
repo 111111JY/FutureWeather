@@ -93,11 +93,15 @@ object Repository {
         }
     }
 
-    fun savePlace(place: PlaceResponse.Place) = PlaceDao.savePlace(place)
+    fun savePlace(placeList: ArrayList<PlaceResponse.Place>) = PlaceDao.savePlace(placeList)
 
-    fun getSavedPlace() = PlaceDao.getSavedPlace()
+    fun getSavedLocationPlace() = PlaceDao.getSavedLocationPlace()
 
-    fun isPlaceSaved() = PlaceDao.isPlaceSaved()
+    fun getSavedManagePlace() = PlaceDao.getSavedManagePlace()
+
+    fun isPlaceSaved(place: PlaceResponse.Place):Boolean = PlaceDao.isPlaceSaved(place)
+
+    fun hasPlace() = PlaceDao.hasPlace()
 
     /**
      * 对返回的结果统一做try catch处理

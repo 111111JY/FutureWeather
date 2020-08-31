@@ -156,7 +156,7 @@
         android:focusable="true">
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/manageFragment"
+            android:id="@+id/manageFragment_start"
             android:name="com.example.futureweather.ui.manage.ManageFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

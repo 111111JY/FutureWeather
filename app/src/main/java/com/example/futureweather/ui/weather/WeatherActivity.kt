@@ -1,5 +1,6 @@
 package com.example.futureweather.ui.weather
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.IntentFilter
 import android.net.ConnectivityManager
@@ -16,17 +17,20 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.futureweather.R
 import com.example.futureweather.extension.showToast
 import com.example.futureweather.logic.model.*
+import com.example.futureweather.ui.manage.ManageFragment
 import com.example.futureweather.utils.AppBarLayoutStateChangeListener
 import com.example.futureweather.utils.GlobalUtil
 import com.example.futureweather.utils.LogUtil
 import com.example.futureweather.utils.broadcastreceiver.NetWorkStateReceiver
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_weather.*
+import kotlinx.android.synthetic.main.activity_weather.view.*
 import kotlinx.android.synthetic.main.aqi.*
 import kotlinx.android.synthetic.main.forecast.*
 import kotlinx.android.synthetic.main.hourly.*
@@ -64,13 +68,13 @@ class WeatherActivity : AppCompatActivity() {
         val filter = IntentFilter()
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
         registerReceiver(netWorkStateReceiver, filter)
-        LogUtil.i(TAG, "注册网络监听广播")
+        LogUtil.i(TAG, getString(R.string.registerBroadcast))
         super.onResume()
     }
 
     override fun onPause() {
         unregisterReceiver(netWorkStateReceiver)
-        LogUtil.i(TAG, "注销网络监听广播")
+        LogUtil.i(TAG, getString(R.string.unregisterBroadcast))
         super.onPause()
     }
 
@@ -164,8 +168,8 @@ class WeatherActivity : AppCompatActivity() {
                 //设置标题栏
                 setAppBar(viewModel.placeName + "  $currentSkyText  $currentTemperature")
             } else {
-                "无法成功获取天气信息，请检查网络连接".showToast()
-                setAppBar("定位失败")
+                getString(R.string.disconnect_tips).showToast()
+                setAppBar(getString(R.string.updateFail))
                 result.exceptionOrNull()?.printStackTrace()
             }
             //数据回来后，需要将进度条设置为停止
@@ -227,13 +231,14 @@ class WeatherActivity : AppCompatActivity() {
      * 生成今日天气详情UI
      * @param realtime RealTime 数据对象
      */
+    @SuppressLint("SetTextI18n")
     private fun generateTodayMore(realtime: RealTimeResponse.RealTime, daily: DailyResponse.Daily) {
         minTempText.text = "${daily.temperature[0].min.toInt()}℃"
         maxTempText.text = "${daily.temperature[0].max.toInt()}℃"
         apparentTempText.text = "${realtime.apparent_temperature.toInt()}℃"
         humidityText.text = "${(realtime.humidity * 100).toInt()}%"
-        sunriseText.text = "${daily.astro[0].sunrise.time}"
-        sunsetText.text = "${daily.astro[0].sunset.time}"
+        sunriseText.text = daily.astro[0].sunrise.time
+        sunsetText.text = daily.astro[0].sunset.time
         windDirectionText.text = Wind.getWindDirection(realtime.wind.direction)
         windStrengthText.text = Wind.getWindStrength(realtime.wind.speed)
     }
@@ -242,6 +247,7 @@ class WeatherActivity : AppCompatActivity() {
      * 生成实时天气UI
      * @param realtime RealTime 数据对象
      */
+    @SuppressLint("SetTextI18n")
     private fun generateNowUI(realtime: RealTimeResponse.RealTime, daily: DailyResponse.Daily) {
         placeName.text = viewModel.placeName
         val calendar = Calendar.getInstance()
@@ -251,7 +257,7 @@ class WeatherActivity : AppCompatActivity() {
         currentTemperature = "${realtime.temperature.toInt()}℃"
         currentTemp.text = currentTemperature
         currentSkyText = getSky(realtime.skycon).info
-        comfortText.text = "今日天气人体感觉  ${daily.lifeIndex.comfort[0].desc}"
+        comfortText.text = "${getString(R.string.today_feel)}  ${daily.lifeIndex.comfort[0].desc}"
         nowLayout.setBackgroundResource(getSky(realtime.skycon).bg)
     }
 
@@ -318,6 +324,7 @@ class WeatherActivity : AppCompatActivity() {
      * 生成未来两小时内降雨概率UI
      * @param minutely Minutely 数据对象
      */
+    @SuppressLint("SetTextI18n")
     private fun generateMinutelyUI(minutely: MinutelyResponse.Minutely) {
         rain30Text.text = "${(minutely.probability[0] * 100).toInt()}%"
         rain60Text.text = "${(minutely.probability[1] * 100).toInt()}%"
@@ -355,7 +362,11 @@ class WeatherActivity : AppCompatActivity() {
                 )
             }
 
-            override fun onDrawerOpened(drawerView: View) {}
+            override fun onDrawerOpened(drawerView: View) {
+                if (manageFragment_start.isShown) {
+                   supportFragmentManager.findFragmentById(R.id.manageFragment_start)?.onResume()
+                }
+            }
         })
     }
 

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="10dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/placeInfoLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/placeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="17sp"
+                tools:text="花都区" />
+
+            <TextView
+                android:id="@+id/placeAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="12sp"
+                tools:text="中国广东省广州市花都区" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/refreshWeatherBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_go_right" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/operatingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginTop="5dp"
+            android:background="@color/split_view" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/split_view" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/manageDeleteBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_delete"
+                    android:gravity="center"
+                    android:textSize="17sp"
+                    android:text="@string/note_delete"
+                    android:textColor="?android:attr/textColorPrimary" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/split_view" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/setLocationBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_set_location"
+                    android:gravity="center"
+                    android:textSize="17sp"
+                    android:text="@string/note_location"
+                    android:textColor="?android:attr/textColorPrimary" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/split_view" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/split_view" />
+
+    </LinearLayout>
+
+</LinearLayout>
+
+

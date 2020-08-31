@@ -1,10 +1,15 @@
 package com.example.futureweather.utils
 
+import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
+import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
+import android.widget.TextView
 import com.example.futureweather.FutureWeatherApplication
+import com.example.futureweather.R
+import com.example.futureweather.widget.DiyDialog
 import java.text.ParsePosition
 import java.text.SimpleDateFormat
 import java.util.*
@@ -68,5 +73,29 @@ object GlobalUtil {
      */
     fun dateToString(date: Date, formatType: String): String =
         SimpleDateFormat(formatType, CHINA).format(date)
+
+    /**
+     * 展示提示性弹窗
+     * @param context Context
+     * @param content String
+     * @param confirmText String
+     */
+    fun showTipDialog(
+        context: Context,
+        content: String,
+        confirmText: String
+    ) {
+        val diyDialogView =
+            LayoutInflater.from(context).inflate(R.layout.dialog_tip_layout, null)
+        val confirmBtn = diyDialogView.findViewById<TextView>(R.id.confirm_button)
+        val contentText = diyDialogView.findViewById<TextView>(R.id.content_text)
+        confirmBtn.text = confirmText
+        contentText.text = content
+        val dialog = DiyDialog(context, R.style.DiyDialog, diyDialogView)
+        confirmBtn.setOnClickListener {
+            dialog.closeDiyDialog()
+        }
+        dialog.showDiyDialog()
+    }
 }
 
