@@ -30,17 +30,24 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
     }
 
+    override fun onStop() {
+        //暂停动画  避免内存溢出
+        animation_place_footer.pauseAnimation()
+        super.onStop()
+    }
+
     /**
      * 是否展示断开网络展位图
      * @param show Boolean
      */
     fun showDisconnectHolderBg(show: Boolean) {
         if (show) {
-            bgImageView.setImageResource(R.drawable.bg_disconnect_girl)
+            animation_place_footer.setAnimation(R.raw.disconnected_boy)
             tipsText.text = getString(R.string.disconnect_tips)
         } else {
-            bgImageView.setImageResource(R.drawable.bg_choose_place)
+            animation_place_footer.setAnimation(R.raw.place_search_footer_bus)
             tipsText.text = getString(R.string.tips_text)
         }
+        animation_place_footer.resumeAnimation()
     }
 }

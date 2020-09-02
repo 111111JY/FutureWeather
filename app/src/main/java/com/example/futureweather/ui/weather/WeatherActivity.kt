@@ -17,22 +17,21 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.airbnb.lottie.LottieAnimationView
 import com.example.futureweather.R
 import com.example.futureweather.extension.showToast
 import com.example.futureweather.logic.model.*
-import com.example.futureweather.ui.manage.ManageFragment
 import com.example.futureweather.utils.AppBarLayoutStateChangeListener
 import com.example.futureweather.utils.GlobalUtil
 import com.example.futureweather.utils.LogUtil
 import com.example.futureweather.utils.broadcastreceiver.NetWorkStateReceiver
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_weather.*
-import kotlinx.android.synthetic.main.activity_weather.view.*
 import kotlinx.android.synthetic.main.aqi.*
 import kotlinx.android.synthetic.main.forecast.*
+import kotlinx.android.synthetic.main.fragment_place.*
 import kotlinx.android.synthetic.main.hourly.*
 import kotlinx.android.synthetic.main.life_index.*
 import kotlinx.android.synthetic.main.now.*
@@ -68,12 +67,14 @@ class WeatherActivity : AppCompatActivity() {
         val filter = IntentFilter()
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
         registerReceiver(netWorkStateReceiver, filter)
+        startAnimation(true)
         LogUtil.i(TAG, getString(R.string.registerBroadcast))
         super.onResume()
     }
 
     override fun onPause() {
         unregisterReceiver(netWorkStateReceiver)
+        startAnimation(false)
         LogUtil.i(TAG, getString(R.string.unregisterBroadcast))
         super.onPause()
     }
@@ -110,10 +111,15 @@ class WeatherActivity : AppCompatActivity() {
         if (visibility) {
             weatherContent.visibility = View.GONE
             disconnectHolderLayout.visibility = View.VISIBLE
+            animation_place_footer.setAnimation(R.raw.disconnected_boy)
+            tipsText.text = getString(R.string.disconnect_tips)
         } else {
             disconnectHolderLayout.visibility = View.GONE
             weatherContent.visibility = View.VISIBLE
+            animation_place_footer.setAnimation(R.raw.place_search_footer_bus)
+            tipsText.text = getString(R.string.tips_text)
         }
+        animation_place_footer.resumeAnimation()
     }
 
     /**
@@ -253,7 +259,8 @@ class WeatherActivity : AppCompatActivity() {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
         serverTime.text = GlobalUtil.timeStampToString(calendar.timeInMillis, "MM月dd日  EEEE  HH:mm")
-        title_skyIcon.setImageResource(getSky(realtime.skycon).icon)
+        title_skyIcon.setAnimation(getSky(realtime.skycon).animation)
+        title_skyIcon.playAnimation()
         currentTemperature = "${realtime.temperature.toInt()}℃"
         currentTemp.text = currentTemperature
         currentSkyText = getSky(realtime.skycon).info
@@ -364,7 +371,7 @@ class WeatherActivity : AppCompatActivity() {
 
             override fun onDrawerOpened(drawerView: View) {
                 if (manageFragment_start.isShown) {
-                   supportFragmentManager.findFragmentById(R.id.manageFragment_start)?.onResume()
+                    supportFragmentManager.findFragmentById(R.id.manageFragment_start)?.onResume()
                 }
             }
         })
@@ -409,4 +416,18 @@ class WeatherActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 是否开启动画
+     * @param start Boolean
+     */
+    private fun startAnimation(start: Boolean) {
+        if (start) {
+            animation_place_footer.resumeAnimation()
+            animation_place_header.resumeAnimation()
+        } else {
+            //暂停动画  避免内存溢出
+            animation_place_footer.pauseAnimation()
+            animation_place_header.pauseAnimation()
+        }
+    }
 }

@@ -53,8 +53,11 @@ class PlaceFragment : Fragment() {
                 viewModel.searchPlaces(content)
             } else {
                 recyclerview.visibility = View.GONE
-                bgImageView.visibility = View.VISIBLE
+                animation_place_footer.visibility = View.VISIBLE
+                animation_place_footer.resumeAnimation()
                 tipsText.visibility = View.VISIBLE
+                animation_place_header.visibility = View.VISIBLE
+                animation_place_header.resumeAnimation()
                 viewModel.placeList.clear()
                 adapter.notifyDataSetChanged()
             }
@@ -64,8 +67,11 @@ class PlaceFragment : Fragment() {
             val places = result.getOrNull()
             if (places != null) {
                 recyclerview.visibility = View.VISIBLE
-                bgImageView.visibility = View.GONE
+                animation_place_footer.visibility = View.GONE
+                animation_place_footer.pauseAnimation()
                 tipsText.visibility = View.GONE
+                animation_place_header.visibility = View.GONE
+                animation_place_header.pauseAnimation()
                 viewModel.placeList.clear()
                 viewModel.placeList.addAll(places)
                 adapter.notifyDataSetChanged()

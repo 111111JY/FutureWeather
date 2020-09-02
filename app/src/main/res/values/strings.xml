@@ -42,10 +42,15 @@
     <string name="disconnect_tips">网络已断开，请连接网络</string>
     <string name="note_title">提示</string>
     <string name="note_now_content">系统默认展示当前地区的天气信息</string>
+    <string name="note_switch_content">系统将开启天气信息通知提醒功能</string>
+    <string name="note_delete_size1">地区列表需至少保留一个！</string>
     <string name="note_delete_content">是否将该地区从地区列表中移除？</string>
     <string name="note_location_content">是否将该地区设置为当前地区？</string>
     <string name="note_cancel">取消</string>
     <string name="note_delete">移除</string>
     <string name="note_confirm">确定</string>
     <string name="note_location">设定</string>
+
+    <string name="note_rain_forecast_55">未来2小时内有一半概率会下雨，出门请带好您的雨具。点击可查看详细的天气信息</string>
+    <string name="note_rain_forecast_75">未来2小时内很大概率会下雨，出门请带好您的雨具。点击可查看详细的天气信息</string>
 </resources>

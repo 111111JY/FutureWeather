@@ -31,9 +31,13 @@ object PlaceDao {
     fun getSavedManagePlace(): ArrayList<PlaceResponse.Place> {
         val placeJson = sharedPreferences()
             .getString("place", "")
-        return Gson().fromJson(
-            placeJson.toString()
-        )
+        return if (placeJson.isNullOrEmpty()){
+            ArrayList<PlaceResponse.Place>()
+        } else {
+            Gson().fromJson(
+                placeJson.toString()
+            )
+        }
     }
 
     fun isPlaceSaved(place: PlaceResponse.Place): Boolean {

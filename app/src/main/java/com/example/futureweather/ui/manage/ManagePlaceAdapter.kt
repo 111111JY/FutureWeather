@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.example.futureweather.R
 import com.example.futureweather.extension.showToast
 import com.example.futureweather.logic.model.PlaceResponse
@@ -81,6 +82,8 @@ class ManagePlaceAdapter(
         val confirmBtn = diyDialogView.findViewById<TextView>(R.id.confirm_button)
         val cancelBtn = diyDialogView.findViewById<TextView>(R.id.cancel_button)
         val contentText = diyDialogView.findViewById<TextView>(R.id.content_text)
+        val contentAnimation =
+            diyDialogView.findViewById<LottieAnimationView>(R.id.content_animation)
         confirmBtn.text = fragment.getString(R.string.note_delete)
         cancelBtn.text = fragment.getString(R.string.note_cancel)
         contentText.text = fragment.getString(R.string.note_delete_content)
@@ -90,14 +93,31 @@ class ManagePlaceAdapter(
             dialog.closeDiyDialog()
         }
         confirmBtn.setOnClickListener {
-            //移除指定位置的地区
-            placeList.removeAt(position)
-            //保存现在的地区列表
-            fragment.viewModel.savePlace(placeList)
-            dialog.closeDiyDialog()
-            //通知recyclerview刷新列表
-            notifyDataSetChanged()
+            if (placeList.size > 1){
+                //移除指定位置的地区
+                placeList.removeAt(position)
+                //保存现在的地区列表
+                fragment.viewModel.savePlace(placeList)
+                contentText.visibility = View.GONE
+                contentAnimation.setAnimation(R.raw.delete_finish)
+                contentAnimation.visibility = View.VISIBLE
+                contentAnimation.loop(false)
+                if (!contentAnimation.isAnimating) {
+                    contentAnimation.playAnimation()
+                }
+
+                contentAnimation.addAnimatorUpdateListener {
+                    if (it.animatedFraction == 1F) {
+                        dialog.closeDiyDialog()
+                    }
+                }
+                //通知recyclerview刷新列表
+                notifyDataSetChanged()
+            } else {
+                fragment.getString(R.string.note_delete_size1).showToast()
+            }
         }
+        dialog.setCanceledOnTouchOutside(false)
         dialog.showDiyDialog()
     }
 
@@ -107,6 +127,8 @@ class ManagePlaceAdapter(
         val confirmBtn = diyDialogView.findViewById<TextView>(R.id.confirm_button)
         val cancelBtn = diyDialogView.findViewById<TextView>(R.id.cancel_button)
         val contentText = diyDialogView.findViewById<TextView>(R.id.content_text)
+        val contentAnimation =
+            diyDialogView.findViewById<LottieAnimationView>(R.id.content_animation)
         confirmBtn.text = fragment.getString(R.string.note_confirm)
         cancelBtn.text = fragment.getString(R.string.note_cancel)
         contentText.text = fragment.getString(R.string.note_location_content)
@@ -128,17 +150,33 @@ class ManagePlaceAdapter(
             val place = placeList[0]
             val activity = fragment.activity
             if (activity is WeatherActivity) {
-                activity.drawerLayout.closeDrawers()
                 activity.viewModel.locationLng = place.location.lng
                 activity.viewModel.locationLat = place.location.lat
                 activity.viewModel.placeName = place.name
                 activity.refreshWeather()
             }
 
-            dialog.closeDiyDialog()
+            contentAnimation.addAnimatorUpdateListener {
+                if (it.animatedFraction == 1F) {
+                    dialog.closeDiyDialog()
+                    if (activity is WeatherActivity) {
+                        activity.drawerLayout.closeDrawers()
+                    }
+                }
+            }
+
+            contentText.visibility = View.GONE
+            contentAnimation.setAnimation(R.raw.set_done_finish)
+            contentAnimation.visibility = View.VISIBLE
+            contentAnimation.loop(false)
+            if (!contentAnimation.isAnimating) {
+                contentAnimation.playAnimation()
+            }
+
             //通知recyclerview刷新列表
             notifyDataSetChanged()
         }
+        dialog.setCanceledOnTouchOutside(false)
         dialog.showDiyDialog()
     }
 }

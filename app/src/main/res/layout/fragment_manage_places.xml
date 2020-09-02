@@ -1,9 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent">
+
+    <FrameLayout
+        android:id="@+id/note_layout"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp">
+
+        <ImageView
+            android:id="@+id/ic_note"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_note"
+            android:visibility="visible" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation_note"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="centerInside"
+            android:visibility="gone"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/note_rain_white" />
+
+    </FrameLayout>
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/note_switch_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/note_layout"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:gravity="top|center_horizontal" />
 
     <ImageView
         android:id="@+id/bgImageView"
@@ -28,17 +67,19 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/nowTitle"
         android:layout_marginLeft="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:layout_marginRight="20dp">
 
-        <ImageView
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/nowLocationIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:src="@drawable/ic_location" />
+            android:layout_marginBottom="3dp"
+            android:scaleType="fitXY"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/place_manage_location" />
 
         <TextView
             android:id="@+id/nowPlaceName"
@@ -46,28 +87,11 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/nowLocationIcon"
+            android:paddingTop="2dp"
             android:textColor="?android:textColorPrimary"
             android:textSize="18sp"
             tools:text="花都区" />
 
-        <ImageView
-            android:id="@+id/nowSkyIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@+id/nowPlaceSkyTemp"
-            tools:src="@drawable/ic_heavy_snow" />
-
-        <TextView
-            android:id="@+id/nowPlaceSkyTemp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:textColor="?android:textColorPrimary"
-            android:textSize="18sp"
-            tools:text="32℃" />
     </RelativeLayout>
 
     <View
