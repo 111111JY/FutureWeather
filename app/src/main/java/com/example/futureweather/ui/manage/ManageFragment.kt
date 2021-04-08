@@ -16,7 +16,9 @@ import com.example.futureweather.extension.showToast
 import com.example.futureweather.logic.model.PlaceResponse
 import com.example.futureweather.ui.weather.WeatherActivity
 import com.example.futureweather.utils.GlobalUtil
+import com.example.futureweather.utils.NoteNotification
 import com.example.futureweather.widget.DiyDialog
+import kotlinx.android.synthetic.main.activity_weather.*
 import kotlinx.android.synthetic.main.fragment_manage_places.*
 
 class ManageFragment : Fragment() {

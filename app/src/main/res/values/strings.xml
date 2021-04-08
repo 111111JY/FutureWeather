@@ -50,7 +50,8 @@
     <string name="note_delete">移除</string>
     <string name="note_confirm">确定</string>
     <string name="note_location">设定</string>
-
+    <string name="note_rain_forecast_10">未来2小时内天气很好，可以放心出门。点击可查看详细的天气信息</string>
+    <string name="note_rain_forecast_35">未来2小时内小概率会下雨，出门前可以留意天色。点击可查看详细的天气信息</string>
     <string name="note_rain_forecast_55">未来2小时内有一半概率会下雨，出门请带好您的雨具。点击可查看详细的天气信息</string>
     <string name="note_rain_forecast_75">未来2小时内很大概率会下雨，出门请带好您的雨具。点击可查看详细的天气信息</string>
 </resources>

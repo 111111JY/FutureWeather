@@ -26,6 +26,7 @@ import com.example.futureweather.logic.model.*
 import com.example.futureweather.utils.AppBarLayoutStateChangeListener
 import com.example.futureweather.utils.GlobalUtil
 import com.example.futureweather.utils.LogUtil
+import com.example.futureweather.utils.NoteNotification
 import com.example.futureweather.utils.broadcastreceiver.NetWorkStateReceiver
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_weather.*
@@ -206,6 +207,12 @@ class WeatherActivity : AppCompatActivity() {
         generateForecastUI(daily)
         //填充life_index.xml布局中的数据
         generateLifeIndexUI(daily)
+
+        minutely.probability.max()?.let {
+            NoteNotification(this , viewModel.placeName,
+                it
+            )
+        }
     }
 
     /**
